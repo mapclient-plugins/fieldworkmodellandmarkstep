@@ -24,7 +24,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
     _validModelNames = ('left hemi-pelvis', 'right hemi-pelvis', 'sacrum', 'right femur')
 
     def __init__(self, location):
-        super(fieldworkmodellandmarkStep, self).__init__('fieldworkmodellandmark', location)
+        super(fieldworkmodellandmarkStep, self).__init__('Fieldwork Model Landmarker', location)
         self._configured = True # A step cannot be executed until it has been configured.
         self._category = 'Anthropometry'
         # Add any other initialisation code here:
