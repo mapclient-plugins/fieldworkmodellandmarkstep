@@ -47,8 +47,17 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         may be connected up to a button in a widget for example.
         '''
         # Put your execute step code here before calling the '_doneExecution' method.
-        self._getRightFemurLandmarks()
-        self._getPelvisLandmarks()
+        modelNames = self._models.keys()
+        if 'right femur' in modelNames:
+            self._getRightFemurLandmarks()
+        
+        if 'pelvis' in modelNames:
+            self._getWholePelvisLandmarks()
+        elif ('right hemi-pelvis' in modelNames) and\
+             ('left hemi-pelvis' in modelNames) and\
+             ('sacrum' in modelNames):
+            self._getPelvisLandmarks()
+        
         self._doneExecution()
 
     def _getRightFemurLandmarks(self):
@@ -60,6 +69,12 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
     	femurLandmarks['RMEC'] = femurM.measurements['epicondylar_width'].p2[1]
     	femurLandmarks['RLEC'] = femurM.measurements['epicondylar_width'].p1[1]
     	self._landmarks.update(femurLandmarks)
+
+
+    def _getWholePelvisLandmarks(self):
+        pelvisM = pm.PelvisMeasurements(self._models['pelvis'])
+        self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
+        # self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
 
     def _getPelvisLandmarks(self):
     	combPelvisGF = geometric_field.geometric_field(
@@ -82,7 +97,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
 
     	pelvisM = pm.PelvisMeasurements(combPelvisGF)
     	self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
-    	self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
+    	# self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
 
     def setPortData(self, index, dataIn):
         '''
