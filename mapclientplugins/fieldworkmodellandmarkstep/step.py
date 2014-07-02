@@ -7,8 +7,8 @@ import os
 from PySide import QtGui
 from PySide import QtCore
 
-from mountpoints.workflowstep import WorkflowStepMountPoint
-# from fieldworkmodellandmarkstep.configuredialog import ConfigureDialog
+from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
+# fromapclientplugins.m fieldworkmodellandmarkstep.configuredialog import ConfigureDialog
 
 from workutils import pelvis_common_data as pcd
 from workutils import pelvis_measurements as pm
@@ -73,6 +73,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
 
     def _getWholePelvisLandmarks(self):
         pelvisM = pm.PelvisMeasurements(self._models['pelvis'])
+        pelvisM.calcAcetabulumDiameters()
         self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
         # self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
 
