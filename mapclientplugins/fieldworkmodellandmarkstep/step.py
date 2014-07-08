@@ -28,6 +28,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         self._configured = True # A step cannot be executed until it has been configured.
         self._category = 'Anthropometry'
         # Add any other initialisation code here:
+        self._icon = QtGui.QImage(':/fieldworkmodellandmarkstep/images/fieldworkmodellandmarkicon.png')
         # Ports:
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',

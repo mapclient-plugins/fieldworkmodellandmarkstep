@@ -1,0 +1,6 @@
+
+<RCC>
+  <qresource prefix="fieldworkmodellandmarkstep">
+    <file>images/fieldworkmodellandmarkicon.png</file>
+  </qresource>
+</RCC>
