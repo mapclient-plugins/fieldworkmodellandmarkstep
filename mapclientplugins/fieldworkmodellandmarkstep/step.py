@@ -10,10 +10,10 @@ from PySide import QtCore
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 # fromapclientplugins.m fieldworkmodellandmarkstep.configuredialog import ConfigureDialog
 
-from workutils import pelvis_common_data as pcd
-from workutils import pelvis_measurements as pm
-from workutils import femur_common_data_2 as fcd
-from workutils import femur_measurements as fm
+from gias.musculoskeletal import fw_pelvis_model_data as pcd
+from gias.musculoskeletal import fw_pelvis_measurements as pm
+from gias.musculoskeletal import fw_femur_model_data as fcd
+from gias.musculoskeletal import fw_femur_measurements as fm
 from fieldwork.field import geometric_field
 
 class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
