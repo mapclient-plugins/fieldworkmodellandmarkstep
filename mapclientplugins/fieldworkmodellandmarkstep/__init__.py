@@ -19,5 +19,8 @@ This file is part of MAP Client. (http://launchpad.net/mapclient)
 """
 __version__ = '0.1.0'
 __author__ = 'Ju Zhang'
+__stepname__ = 'Fieldwork Model Landmarker'
+__location__ = 'https://github.com/mapclient-plugins/fieldworkmodellandmarkstep/archive/master.zip'
+
 from mapclientplugins.fieldworkmodellandmarkstep import step
 import mapclientplugins.fieldworkmodellandmarkstep.resources_rc

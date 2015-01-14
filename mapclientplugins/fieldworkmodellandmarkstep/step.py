@@ -62,14 +62,14 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         self._doneExecution()
 
     def _getRightFemurLandmarks(self):
-    	femurM = fm.FemurMeasurements(self._models['right femur'])
-    	femurM.calcHeadDiameter()
-    	femurM.calcEpicondylarWidthByNode()
-    	femurLandmarks = {}
-    	femurLandmarks['RFHC'] = femurM.measurements['head_diameter'].centre
-    	femurLandmarks['RMEC'] = femurM.measurements['epicondylar_width'].p2[1]
-    	femurLandmarks['RLEC'] = femurM.measurements['epicondylar_width'].p1[1]
-    	self._landmarks.update(femurLandmarks)
+        femurM = fm.FemurMeasurements(self._models['right femur'])
+        femurM.calcHeadDiameter()
+        femurM.calcEpicondylarWidthByNode()
+        femurLandmarks = {}
+        femurLandmarks['RFHC'] = femurM.measurements['head_diameter'].centre
+        femurLandmarks['RMEC'] = femurM.measurements['epicondylar_width'].p2[1]
+        femurLandmarks['RLEC'] = femurM.measurements['epicondylar_width'].p1[1]
+        self._landmarks.update(femurLandmarks)
 
 
     def _getWholePelvisLandmarks(self):
@@ -79,27 +79,27 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         # self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
 
     def _getPelvisLandmarks(self):
-    	combPelvisGF = geometric_field.geometric_field(
-    					'combined pelvis', 3, field_dimensions=2,
-    					field_basis={'tri10':'simplex_L3_L3','quad44':'quad_L3_L3'})
-    	combPelvisGF.ensemble_field_function.name = 'pelvis_combined_cubic'
-    	combPelvisGF.ensemble_field_function.mesh.name = 'pelvis_combined_cubic'
-    	combPelvisGF.add_element_with_parameters(
-						self._models['right hemi-pelvis'].ensemble_field_function,
-						self._models['right hemi-pelvis'].get_field_parameters(),
-						tol=0 )
-    	combPelvisGF.add_element_with_parameters(
-						self._models['left hemi-pelvis'].ensemble_field_function,
-						self._models['left hemi-pelvis'].get_field_parameters(),
-						tol=0 )
-    	combPelvisGF.add_element_with_parameters(
-						self._models['sacrum'].ensemble_field_function,
-						self._models['sacrum'].get_field_parameters(),
-						tol=0 )
+        combPelvisGF = geometric_field.geometric_field(
+                        'combined pelvis', 3, field_dimensions=2,
+                        field_basis={'tri10':'simplex_L3_L3','quad44':'quad_L3_L3'})
+        combPelvisGF.ensemble_field_function.name = 'pelvis_combined_cubic'
+        combPelvisGF.ensemble_field_function.mesh.name = 'pelvis_combined_cubic'
+        combPelvisGF.add_element_with_parameters(
+                        self._models['right hemi-pelvis'].ensemble_field_function,
+                        self._models['right hemi-pelvis'].get_field_parameters(),
+                        tol=0 )
+        combPelvisGF.add_element_with_parameters(
+                        self._models['left hemi-pelvis'].ensemble_field_function,
+                        self._models['left hemi-pelvis'].get_field_parameters(),
+                        tol=0 )
+        combPelvisGF.add_element_with_parameters(
+                        self._models['sacrum'].ensemble_field_function,
+                        self._models['sacrum'].get_field_parameters(),
+                        tol=0 )
 
-    	pelvisM = pm.PelvisMeasurements(combPelvisGF)
-    	self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
-    	# self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
+        pelvisM = pm.PelvisMeasurements(combPelvisGF)
+        self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
+        # self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
 
     def setPortData(self, index, dataIn):
         '''
