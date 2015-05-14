@@ -21,7 +21,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
     Skeleton step which is intended to be a helpful starting point
     for new steps.
     '''
-    _validModelNames = ('left hemi-pelvis', 'right hemi-pelvis', 'sacrum', 'right femur')
+    _validModelNames = ('left hemi-pelvis', 'right hemi-pelvis', 'sacrum', 'right femur', 'left femur')
 
     def __init__(self, location):
         super(fieldworkmodellandmarkStep, self).__init__('Fieldwork Model Landmarker', location)
@@ -51,6 +51,9 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         modelNames = self._models.keys()
         if 'right femur' in modelNames:
             self._getRightFemurLandmarks()
+
+        if 'left femur' in modelNames:
+            self._getLeftFemurLandmarks()
         
         if 'pelvis' in modelNames:
             self._getWholePelvisLandmarks()
@@ -59,7 +62,19 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
              ('sacrum' in modelNames):
             self._getPelvisLandmarks()
         
+        self._printLandmarks()
         self._doneExecution()
+
+    def _printLandmarks(self):
+        print('Landmarks Evaluated:')
+        landmarkNames = sorted(self._landmarks.keys())
+        for ldn in landmarkNames:
+            print('{}: {:6.2f}, {:6.2f}, {:6.2f}'.format(
+                    ldn,
+                    self._landmarks[ldn][0], 
+                    self._landmarks[ldn][1], 
+                    self._landmarks[ldn][2], 
+                    ))
 
     def _getRightFemurLandmarks(self):
         femurM = fm.FemurMeasurements(self._models['right femur'])
@@ -71,6 +86,15 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         femurLandmarks['RLEC'] = femurM.measurements['epicondylar_width'].p1[1]
         self._landmarks.update(femurLandmarks)
 
+    def _getLeftFemurLandmarks(self):
+        femurM = fm.FemurMeasurements(self._models['left femur'])
+        femurM.calcHeadDiameter()
+        femurM.calcEpicondylarWidthByNode()
+        femurLandmarks = {}
+        femurLandmarks['LFHC'] = femurM.measurements['head_diameter'].centre
+        femurLandmarks['LMEC'] = femurM.measurements['epicondylar_width'].p2[1]
+        femurLandmarks['LLEC'] = femurM.measurements['epicondylar_width'].p1[1]
+        self._landmarks.update(femurLandmarks)
 
     def _getWholePelvisLandmarks(self):
         pelvisM = pm.PelvisMeasurements(self._models['pelvis'])
