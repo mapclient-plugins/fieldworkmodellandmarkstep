@@ -51,9 +51,10 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         modelNames = self._models.keys()
         if 'right femur' in modelNames:
             self._getRightFemurLandmarks()
+
         if 'left femur' in modelNames:
             self._getLeftFemurLandmarks()
-
+        
         if 'pelvis' in modelNames:
             self._getWholePelvisLandmarks()
         elif ('right hemi-pelvis' in modelNames) and\
@@ -61,7 +62,19 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
              ('sacrum' in modelNames):
             self._getPelvisLandmarks()
         
+        self._printLandmarks()
         self._doneExecution()
+
+    def _printLandmarks(self):
+        print('Landmarks Evaluated:')
+        landmarkNames = sorted(self._landmarks.keys())
+        for ldn in landmarkNames:
+            print('{}: {:6.2f}, {:6.2f}, {:6.2f}'.format(
+                    ldn,
+                    self._landmarks[ldn][0], 
+                    self._landmarks[ldn][1], 
+                    self._landmarks[ldn][2], 
+                    ))
 
     def _getRightFemurLandmarks(self):
         femurM = fm.FemurMeasurements(self._models['right femur'])
