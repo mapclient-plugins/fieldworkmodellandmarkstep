@@ -14,7 +14,24 @@ from gias.musculoskeletal import fw_pelvis_model_data as pcd
 from gias.musculoskeletal import fw_pelvis_measurements as pm
 from gias.musculoskeletal import fw_femur_model_data as fcd
 from gias.musculoskeletal import fw_femur_measurements as fm
+from gias.musculoskeletal import fw_model_landmarks as fml
 from fieldwork.field import geometric_field
+
+FEMUR_LANDMARKS = {'FHC':'femur-HC',
+                   'MEC':'femur-MEC',
+                   'LEC':'femur-LEC',
+                   'FGT':'femur-GT',
+                   'kneecentre':'femur-kneecentre',
+                   }
+
+PELVIS_LANDMARKS = {'LASIS': 'pelvis-LASIS',
+                    'RASIS': 'pelvis-RASIS',
+                    'LPSIS': 'pelvis-LPSIS',
+                    'RPSIS': 'pelvis-RPSIS',
+                    'Sacral': 'pelvis-Sacral',
+                    'LHJC': 'pelvis-LHJC',
+                    'RHJC': 'pelvis-RHJC',                 
+                    }
 
 class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
     '''
@@ -35,7 +52,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
                       'ju#fieldworkmodeldict'))
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
-                      'python#dict'))
+                      'http://physiomeproject.org/workflow/1.0/rdf-schema#landmarks'))
         self._config = {}
         self._config['identifier'] = ''
         self._landmarks = {}
@@ -77,30 +94,36 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
                     ))
 
     def _getRightFemurLandmarks(self):
-        femurM = fm.FemurMeasurements(self._models['right femur'])
-        femurM.calcHeadDiameter()
-        femurM.calcEpicondylarWidthByNode()
         femurLandmarks = {}
-        femurLandmarks['RFHC'] = femurM.measurements['head_diameter'].centre
-        femurLandmarks['RMEC'] = femurM.measurements['epicondylar_width'].p2[1]
-        femurLandmarks['RLEC'] = femurM.measurements['epicondylar_width'].p1[1]
+        meshParams = self._models['right femur'].field_parameters
+        for label, ldmkName in FEMUR_LANDMARKS.items():
+            evalLdmk = fml.makeLandmarkEvaluator(ldmkName, self._models['right femur'])
+            femurLandmarks['R'+label] = evalLdmk(meshParams)
+
         self._landmarks.update(femurLandmarks)
 
     def _getLeftFemurLandmarks(self):
-        femurM = fm.FemurMeasurements(self._models['left femur'])
-        femurM.calcHeadDiameter()
-        femurM.calcEpicondylarWidthByNode()
         femurLandmarks = {}
-        femurLandmarks['LFHC'] = femurM.measurements['head_diameter'].centre
-        femurLandmarks['LMEC'] = femurM.measurements['epicondylar_width'].p2[1]
-        femurLandmarks['LLEC'] = femurM.measurements['epicondylar_width'].p1[1]
+        meshParams = self._models['left femur'].field_parameters
+        for label, ldmkName in FEMUR_LANDMARKS.items():
+            evalLdmk = fml.makeLandmarkEvaluator(ldmkName, self._models['left femur'])
+            femurLandmarks['L'+label] = evalLdmk(meshParams)
+
         self._landmarks.update(femurLandmarks)
 
     def _getWholePelvisLandmarks(self):
-        pelvisM = pm.PelvisMeasurements(self._models['pelvis'])
-        pelvisM.calcAcetabulumDiameters()
-        self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
+        # pelvisM = pm.PelvisMeasurements(self._models['pelvis'])
+        # pelvisM.calcAcetabulumDiameters()
+        # self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
         # self._landmarks['PS'] = (self._landmarks['LSP'] + self._landmarks['RSP'])/2.0
+
+        pelvisLandmarks = {}
+        meshParams = self._models['pelvis'].field_parameters
+        for label, ldmkName in PELVIS_LANDMARKS.items():
+            evalLdmk = fml.makeLandmarkEvaluator(ldmkName, self._models['pelvis'])
+            pelvisLandmarks[label] = evalLdmk(meshParams)
+
+        self._landmarks.update(pelvisLandmarks)
 
     def _getPelvisLandmarks(self):
         combPelvisGF = geometric_field.geometric_field(
