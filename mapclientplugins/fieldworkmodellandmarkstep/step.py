@@ -3,9 +3,9 @@
 MAP Client Plugin Step
 '''
 import os
+import json
 
 from PySide import QtGui
-from PySide import QtCore
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 # fromapclientplugins.m fieldworkmodellandmarkstep.configuredialog import ConfigureDialog
@@ -199,37 +199,16 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         '''
         self._config['identifier'] = identifier
 
-    def serialize(self, location):
+    def serialize(self):
         '''
-        Add code to serialize this step to disk.  The filename should
-        use the step identifier (received from getIdentifier()) to keep it
-        unique within the workflow.  The suggested name for the file on
-        disk is:
-            filename = getIdentifier() + '.conf'
+        Add code to serialize this step to disk. Returns a json string for
+        mapclient to serialise.
+        '''
+        return ''
+
+    def deserialize(self, string):
+        '''
+        Add code to deserialize this step from disk. Parses a json string
+        given by mapclient
         '''
         pass
-        # configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
-        # conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
-        # conf.beginGroup('config')
-        # conf.setValue('identifier', self._config['identifier'])
-        # conf.endGroup()
-
-
-    def deserialize(self, location):
-        '''
-        Add code to deserialize this step from disk.  As with the serialize 
-        method the filename should use the step identifier.  Obviously the 
-        filename used here should be the same as the one used by the
-        serialize method.
-        '''
-        pass
-        # configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
-        # conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
-        # conf.beginGroup('config')
-        # self._config['identifier'] = conf.value('identifier', '')
-        # conf.endGroup()
-
-        # d = ConfigureDialog()
-        # d.identifierOccursCount = self._identifierOccursCount
-        # d.setConfig(self._config)
-        # self._configured = d.validate()
