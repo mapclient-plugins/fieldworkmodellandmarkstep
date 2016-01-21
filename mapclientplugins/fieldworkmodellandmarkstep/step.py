@@ -10,12 +10,12 @@ from PySide import QtGui
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 # fromapclientplugins.m fieldworkmodellandmarkstep.configuredialog import ConfigureDialog
 
-from gias.musculoskeletal import fw_pelvis_model_data as pcd
-from gias.musculoskeletal import fw_pelvis_measurements as pm
-from gias.musculoskeletal import fw_femur_model_data as fcd
-from gias.musculoskeletal import fw_femur_measurements as fm
-from gias.musculoskeletal import fw_model_landmarks as fml
-from fieldwork.field import geometric_field
+from gias2.musculoskeletal import fw_pelvis_model_data as pcd
+from gias2.musculoskeletal import fw_pelvis_measurements as pm
+from gias2.musculoskeletal import fw_femur_model_data as fcd
+from gias2.musculoskeletal import fw_femur_measurements as fm
+from gias2.musculoskeletal import fw_model_landmarks as fml
+from gias2.fieldwork.field import geometric_field
 
 FEMUR_LANDMARKS = {'FHC':'femur-HC',
                    'MEC':'femur-MEC',
