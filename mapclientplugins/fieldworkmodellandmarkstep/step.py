@@ -2,19 +2,14 @@
 '''
 MAP Client Plugin Step
 '''
-import os
-
 from PySide import QtGui
-from PySide import QtCore
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
-# fromapclientplugins.m fieldworkmodellandmarkstep.configuredialog import ConfigureDialog
 
-from gias.musculoskeletal import fw_pelvis_model_data as pcd
-from gias.musculoskeletal import fw_pelvis_measurements as pm
-from gias.musculoskeletal import fw_femur_model_data as fcd
-from gias.musculoskeletal import fw_femur_measurements as fm
-from fieldwork.field import geometric_field
+from gias2.musculoskeletal import fw_pelvis_measurements as pm
+from gias2.musculoskeletal import fw_femur_measurements as fm
+from gias2.fieldwork.field import geometric_field
+
 
 class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
     '''
@@ -152,18 +147,6 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
 
         self._configured = True
 
-        # dlg = ConfigureDialog()
-        # dlg.identifierOccursCount = self._identifierOccursCount
-        # dlg.setConfig(self._config)
-        # dlg.validate()
-        # dlg.setModal(True)
-        
-        # if dlg.exec_():
-        #     self._config = dlg.getConfig()
-        
-        # self._configured = dlg.validate()
-        # self._configuredObserver()
-
     def getIdentifier(self):
         '''
         The identifier is a string that must be unique within a workflow.
@@ -176,7 +159,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         '''
         self._config['identifier'] = identifier
 
-    def serialize(self, location):
+    def serialize(self):
         '''
         Add code to serialize this step to disk.  The filename should
         use the step identifier (received from getIdentifier()) to keep it
@@ -184,15 +167,9 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         disk is:
             filename = getIdentifier() + '.conf'
         '''
-        pass
-        # configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
-        # conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
-        # conf.beginGroup('config')
-        # conf.setValue('identifier', self._config['identifier'])
-        # conf.endGroup()
+        return ''
 
-
-    def deserialize(self, location):
+    def deserialize(self, string):
         '''
         Add code to deserialize this step from disk.  As with the serialize 
         method the filename should use the step identifier.  Obviously the 
@@ -200,15 +177,4 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         serialize method.
         '''
         pass
-        # configuration_file = os.path.join(location, self.getIdentifier() + '.conf')
-        # conf = QtCore.QSettings(configuration_file, QtCore.QSettings.IniFormat)
-        # conf.beginGroup('config')
-        # self._config['identifier'] = conf.value('identifier', '')
-        # conf.endGroup()
-
-        # d = ConfigureDialog()
-        # d.identifierOccursCount = self._identifierOccursCount
-        # d.setConfig(self._config)
-        # self._configured = d.validate()
-
 
