@@ -1,4 +1,3 @@
-
 '''
 MAP Client Plugin Step
 '''
@@ -10,11 +9,11 @@ from gias2.musculoskeletal import fw_pelvis_measurements as pm
 from gias2.musculoskeletal import fw_model_landmarks as fml
 from gias2.fieldwork.field import geometric_field
 
-FEMUR_LANDMARKS = {'FHC':'femur-HC',
-                   'MEC':'femur-MEC',
-                   'LEC':'femur-LEC',
-                   'FGT':'femur-GT',
-                   'kneecentre':'femur-kneecentre',
+FEMUR_LANDMARKS = {'FHC': 'femur-HC',
+                   'MEC': 'femur-MEC',
+                   'LEC': 'femur-LEC',
+                   'FGT': 'femur-GT',
+                   'kneecentre': 'femur-kneecentre',
                    }
 
 PELVIS_LANDMARKS = {'LASIS': 'pelvis-LASIS',
@@ -23,7 +22,7 @@ PELVIS_LANDMARKS = {'LASIS': 'pelvis-LASIS',
                     'RPSIS': 'pelvis-RPSIS',
                     'Sacral': 'pelvis-Sacral',
                     'LHJC': 'pelvis-LHJC',
-                    'RHJC': 'pelvis-RHJC',                 
+                    'RHJC': 'pelvis-RHJC',
                     }
 
 
@@ -36,7 +35,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
 
     def __init__(self, location):
         super(fieldworkmodellandmarkStep, self).__init__('Fieldwork Model Landmarker', location)
-        self._configured = True # A step cannot be executed until it has been configured.
+        self._configured = True  # A step cannot be executed until it has been configured.
         self._category = 'Anthropometry'
         # Add any other initialisation code here:
         self._icon = QtGui.QImage(':/fieldworkmodellandmarkstep/images/fieldworkmodellandmarkicon.png')
@@ -65,14 +64,14 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
 
         if 'left femur' in modelNames:
             self._getLeftFemurLandmarks()
-        
+
         if 'pelvis' in modelNames:
             self._getWholePelvisLandmarks()
-        elif ('right hemi-pelvis' in modelNames) and\
-             ('left hemi-pelvis' in modelNames) and\
-             ('sacrum' in modelNames):
+        elif ('right hemi-pelvis' in modelNames) and \
+                ('left hemi-pelvis' in modelNames) and \
+                ('sacrum' in modelNames):
             self._getPelvisLandmarks()
-        
+
         self._printLandmarks()
         self._doneExecution()
 
@@ -81,18 +80,18 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         landmarkNames = sorted(self._landmarks.keys())
         for ldn in landmarkNames:
             print('{}: {:6.2f}, {:6.2f}, {:6.2f}'.format(
-                    ldn,
-                    self._landmarks[ldn][0], 
-                    self._landmarks[ldn][1], 
-                    self._landmarks[ldn][2], 
-                    ))
+                ldn,
+                self._landmarks[ldn][0],
+                self._landmarks[ldn][1],
+                self._landmarks[ldn][2],
+            ))
 
     def _getRightFemurLandmarks(self):
         femurLandmarks = {}
         meshParams = self._models['right femur'].field_parameters
         for label, ldmkName in FEMUR_LANDMARKS.items():
             evalLdmk = fml.makeLandmarkEvaluator(ldmkName, self._models['right femur'])
-            femurLandmarks['R'+label] = evalLdmk(meshParams)
+            femurLandmarks['R' + label] = evalLdmk(meshParams)
 
         self._landmarks.update(femurLandmarks)
 
@@ -101,7 +100,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         meshParams = self._models['left femur'].field_parameters
         for label, ldmkName in FEMUR_LANDMARKS.items():
             evalLdmk = fml.makeLandmarkEvaluator(ldmkName, self._models['left femur'])
-            femurLandmarks['L'+label] = evalLdmk(meshParams)
+            femurLandmarks['L' + label] = evalLdmk(meshParams)
 
         self._landmarks.update(femurLandmarks)
 
@@ -121,22 +120,22 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
 
     def _getPelvisLandmarks(self):
         combPelvisGF = geometric_field.geometric_field(
-                        'combined pelvis', 3, field_dimensions=2,
-                        field_basis={'tri10':'simplex_L3_L3','quad44':'quad_L3_L3'})
+            'combined pelvis', 3, field_dimensions=2,
+            field_basis={'tri10': 'simplex_L3_L3', 'quad44': 'quad_L3_L3'})
         combPelvisGF.ensemble_field_function.name = 'pelvis_combined_cubic'
         combPelvisGF.ensemble_field_function.mesh.name = 'pelvis_combined_cubic'
         combPelvisGF.add_element_with_parameters(
-                        self._models['right hemi-pelvis'].ensemble_field_function,
-                        self._models['right hemi-pelvis'].get_field_parameters(),
-                        tol=0 )
+            self._models['right hemi-pelvis'].ensemble_field_function,
+            self._models['right hemi-pelvis'].get_field_parameters(),
+            tol=0)
         combPelvisGF.add_element_with_parameters(
-                        self._models['left hemi-pelvis'].ensemble_field_function,
-                        self._models['left hemi-pelvis'].get_field_parameters(),
-                        tol=0 )
+            self._models['left hemi-pelvis'].ensemble_field_function,
+            self._models['left hemi-pelvis'].get_field_parameters(),
+            tol=0)
         combPelvisGF.add_element_with_parameters(
-                        self._models['sacrum'].ensemble_field_function,
-                        self._models['sacrum'].get_field_parameters(),
-                        tol=0 )
+            self._models['sacrum'].ensemble_field_function,
+            self._models['sacrum'].get_field_parameters(),
+            tol=0)
 
         pelvisM = pm.PelvisMeasurements(combPelvisGF)
         self._landmarks.update(pelvisM.measurements['landmarks_unaligned'].value)
@@ -148,7 +147,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         The index is the index of the port in the port list.  If there is only one
         uses port for this step then the index can be ignored.
         '''
-        self._models = dataIn # ju#fieldworkmodeldict
+        self._models = dataIn  # ju#fieldworkmodeldict
 
     def getPortData(self, index):
         '''
@@ -156,7 +155,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         The index is the index of the port in the port list.  If there is only one
         provides port for this step then the index can be ignored.
         '''
-        return self._landmarks # ju#landmarks
+        return self._landmarks  # ju#landmarks
 
     def configure(self):
         '''
