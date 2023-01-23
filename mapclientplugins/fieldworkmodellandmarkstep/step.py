@@ -5,9 +5,9 @@ from PySide2 import QtGui
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 
-from gias2.musculoskeletal import fw_pelvis_measurements as pm
-from gias2.musculoskeletal import fw_model_landmarks as fml
-from gias2.fieldwork.field import geometric_field
+from gias3.musculoskeletal import fw_pelvis_measurements as pm
+from gias3.musculoskeletal import fw_model_landmarks as fml
+from gias3.fieldwork.field import geometric_field
 
 FEMUR_LANDMARKS = {'FHC': 'femur-HC',
                    'MEC': 'femur-MEC',
@@ -119,7 +119,7 @@ class fieldworkmodellandmarkStep(WorkflowStepMountPoint):
         self._landmarks.update(pelvisLandmarks)
 
     def _getPelvisLandmarks(self):
-        combPelvisGF = geometric_field.geometric_field(
+        combPelvisGF = geometric_field.GeometricField(
             'combined pelvis', 3, field_dimensions=2,
             field_basis={'tri10': 'simplex_L3_L3', 'quad44': 'quad_L3_L3'})
         combPelvisGF.ensemble_field_function.name = 'pelvis_combined_cubic'
