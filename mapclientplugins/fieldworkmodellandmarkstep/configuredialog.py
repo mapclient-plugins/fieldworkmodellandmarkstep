@@ -1,6 +1,6 @@
-from PySide2 import QtWidgets
+from PySide6 import QtWidgets
 
-# fromapclientplugins.m fieldworkmodellandmarkstep.ui_configuredialog import Ui_Dialog
+from mapclientplugins.fieldworkmodellandmarkstep.ui_configuredialog import Ui_ConfigureDialog
 
 INVALID_STYLE_SHEET = 'background-color: rgba(239, 0, 0, 50)'
 DEFAULT_STYLE_SHEET = ''
